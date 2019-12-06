@@ -17,12 +17,14 @@ public class Run {
         return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
     public static void main(String[] args) {
+        staticFiles.location("/public"); // Static files
+
         port(getHerokuAssignedPort());
 
         get("/", (req, res) -> {
-            return new ModelAndView(new HashMap<>(), "index.hbs");
+            return new ModelAndView(new HashMap<>(), "hello.hbs");
         }, new HandlebarsTemplateEngine());
-        
+
         get("/hello", (request, response) -> {
             Map<String, String> dataMap = new HashMap();
             dataMap.put("name", "sandiso");
