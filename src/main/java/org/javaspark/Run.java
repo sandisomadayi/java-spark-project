@@ -17,17 +17,23 @@ public class Run {
         return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
     public static void main(String[] args) {
+        Greet greet = new Greet();
+
         staticFiles.location("/public"); // Static files
 
         port(getHerokuAssignedPort());
 
-        get("/", (req, res) -> {
-            return new ModelAndView(new HashMap<>(), "hello.hbs");
-        }, new HandlebarsTemplateEngine());
+        get("/", (req, res) -> new ModelAndView(new HashMap<>(), "hello.hbs"), new HandlebarsTemplateEngine());
 
-        get("/hello", (request, response) -> {
+        post("/greet", (request, response) -> {
             Map<String, String> dataMap = new HashMap();
-            dataMap.put("name", "sandiso");
+            String userName = request.queryParams("userName");
+            String language = request.queryParams("greetingLanguage");
+
+            String greeting = greet.greet(userName, language);
+
+            dataMap.put("counter", greet.getGreetedCount().toString());
+            dataMap.put("greeting", greeting);
 
             return new ModelAndView(dataMap, "hello.hbs");
         }, new HandlebarsTemplateEngine());
