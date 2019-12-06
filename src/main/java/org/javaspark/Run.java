@@ -19,7 +19,10 @@ public class Run {
     public static void main(String[] args) {
         port(getHerokuAssignedPort());
 
-//        get("/hello", (req, res) -> "Hello world");
+        get("/", (req, res) -> {
+            return new ModelAndView(new HashMap<>(), "index.hbs");
+        }, new HandlebarsTemplateEngine());
+        
         get("/hello", (request, response) -> {
             Map<String, String> dataMap = new HashMap();
             dataMap.put("name", "sandiso");
